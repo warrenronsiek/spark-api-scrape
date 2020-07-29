@@ -8,7 +8,13 @@
 (defn get-application-ids []
   (map :id (get-url (str root-url "/applications?status=completed&limit=1"))))
 
-(defn get-stages [app-id] (get-url (str root-url "/applications/" app-id "/1/stages")))
+(defn get-stage-ids [app-id]
+  (map :stageId (get-url (str root-url "/applications/" app-id "/1/stages"))))
 
+(defn get-stage-quantiles [app-id stage-id]
+  (get-url (str root-url "/applications/" app-id "/stages/" stage-id "/1/taskSummary")))
 
-(defn -main [] (println (first (get-application-ids))))
+(defn test []
+  (let [app-id (first (get-application-ids))
+        stage-id (first (get-stage-ids app-id))]
+    (get-stage-quantiles app-id stage-id)))
